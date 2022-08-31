@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    {% load static %}
+    {% csrf_token %}
+    {% block title %} Карта {% endblock %}
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+
+</head>
+
+<body>
+{% block content %}
+<script src="https://api-maps.yandex.ru/2.1/?apikey=3b2548e0-983b-4260-adac-87640f215528&lang=ru_RU" type="text/javascript">
+    </script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<script type="text/javascript">
+    var user = "{{request.user.username}}"
+    var logged = "{{request.user.is_authenticated}}"
+    var token = "{{csrf_token}}"
+    var points = {{ points|safe }};
+</script>
+<script type="text/javascript" src="{% static '/maps.js' %}">
+    </script>
+    <div id="map" style="width: 1200px; height: 800px"></div>
+{% endblock %}
+</body>
+
+</html>
