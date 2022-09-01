@@ -11,5 +11,6 @@ class PointsInfo(models.Model):
     coord2 = models.FloatField(max_length=200, blank=True, null=True)
     place = models.CharField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=500)
+    category = models.CharField(max_length=200, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(auto_now_add=True, blank=True, null=True)

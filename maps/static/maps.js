@@ -1,6 +1,27 @@
 ymaps.ready(init);
 var myMap;
 
+function get_color(category){
+
+switch(category){
+    case "nature":
+    return ["#228B22","#006400"];
+    break;
+    case "home":
+    return ["#FF0000","#B30000"];
+    break;
+    case "markets":
+    return ["#6495ED","#00008B"]
+    break;
+    default:
+    return ["#000000","#000000"]
+}
+
+
+
+}
+
+
 function init () {
     myMap = new ymaps.Map("map", {
         center: [57.5262, 38.3061], // Углич
@@ -14,6 +35,7 @@ function init () {
 
     var arrayLength = points.length;
     if (arrayLength > 0) {
+
     var collection = new ymaps.GeoObjectCollection(null, {
         // Запретим появление балуна.
         hasBalloon: false,
@@ -21,6 +43,10 @@ function init () {
     });
     for (var i = 0; i < arrayLength; i++) {
     point = points[i];
+    console.log(point['category'])
+
+    var color = get_color(point['category'])
+    console.log(color)
     var circle = new ymaps.Circle([
 
         [point['coord1'], point['coord2']],
@@ -34,9 +60,9 @@ function init () {
 
         draggable: false,
 
-        fillColor: "#DB709377",
-
-        strokeColor: "#990066",
+        fillColor: color[0],
+        fillOpacity: 0.3,
+        strokeColor: color[1],
         strokeOpacity: 0.8,
 
         strokeWidth: 5
@@ -52,7 +78,6 @@ function init () {
     myMap.events.add('click', function (e) {
          var coords = e.get('coords');
 
-
          var myCircle = new ymaps.Circle([
         // center circle coordinates
         [coords[0], coords[1]],
@@ -60,19 +85,8 @@ function init () {
         30000
     ], {
         //circle properties
-    }, {
-
-        draggable: false,
-
-        fillColor: "#DB709377",
-
-        strokeColor: "#990066",
-
-        strokeOpacity: 0.8,
-
-        strokeWidth: 5
-    })
-
+    }, )
+// Добавление круга на карту, задание параметров
     // Если меню метки уже отображено, то убираем его.
         if ($('#menu').css('display') == 'block') {
             $('#menu').remove();
@@ -83,20 +97,24 @@ function init () {
         } else {
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
             var yyyy = today.getFullYear();
 
-            today = mm + '/' + dd + '/' + yyyy;
+            today =  dd + '/' + mm + '/' + yyyy;
             // HTML-содержимое контекстного меню.
             var menuContent =
-                '<div id="menu">\
-                    <ul id="menu_list">\
-                        <li>Место: <br /> <input type="text" name="place_text" /></li>\
-                        <li>Описание: <br /> <input type="text" name="describe_text" /></li>\
-                        <li>Балун: <br /> <input type="text" name="balloon_text" /></li>\
-                    </ul>\
-                <div align="center"><input class="btn btn-success" id="add" type="submit" value="Добавить" /></div>\
-                </div>';
+                '<div id="menu">' +
+                    '<ul id="menu_list">'+
+                        '<li>Место: <br /> <input type="text" name="place_text" /></li>'+
+                        '<li>Описание: <br /> <input type="text" name="describe_text" /></li>'+
+                        '<li>Выберете тип: <br /> <select name="category" id="category">'+
+                           '<option value="nature">Очаги в дикой природе</option>'+
+                            '<option value="home">Очаги домащней свиньи</option>'+
+                            '<option value="markets">Мясо, торговые точки</option>'+
+                                            '</select>'+
+                    '</ul>'+
+                '<div align="center"><input class="btn btn-success" id="add" type="submit" value="Добавить" /></div>'+
+                '</div>';
 
             // Размещаем контекстное меню на странице
             $('body').append(menuContent);
@@ -115,7 +133,12 @@ function init () {
             // При нажатии на кнопку "Сохранить" изменяем свойства метки
             // значениями, введенными в форме контекстного меню.
             $('#menu input[id="add"]').click(function () {
+
                 var place = $('input[name="place_text"]').val()
+                var category = $('#menu select[name="category"]').val()
+                var color = get_color(category)
+                console.log(color)
+                console.log(myCircle)
                 var description = $('input[name=describe_text]').val()
                 myCircle.properties.set({
 
@@ -128,7 +151,19 @@ function init () {
                     balloonContentFooter: '<strong>Кем добавлено</strong> '+ user + '<br> <strong>Дата добавления</strong> '+today ,
 
 
-                });
+                }, );
+              myCircle.options.set({
+
+            draggable: false,
+
+            fillColor: color[0],
+
+            strokeColor: color[1],
+            fillOpacity: 0.3,
+            strokeOpacity: 0.8,
+
+            strokeWidth: 5
+            })
                 // Удаляем контекстное меню.
                 $('#menu').remove();
 
@@ -143,6 +178,7 @@ function init () {
                 coord2: coords[1],
                 place: place,
                 description: description,
+                category: category,
                 user : user,
                 date : today,
                 action: "add"
@@ -191,6 +227,7 @@ if ($('#deletemenu').css('display') == 'block' ) {
 
          $('body').append(menuContent);
          $('#deletemenu input[id="delete"]').click(function () {
+         $('#deletemenu').remove();
          $.ajax({
                 url: '',
                 type: 'POST',

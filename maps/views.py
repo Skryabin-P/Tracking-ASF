@@ -14,12 +14,12 @@ def main(response):
             print(dict)
             if dict['action'] == 'add':
                 db = PointsInfo.objects.create(coord1=dict['coord1'],coord2=dict['coord2'],place=dict['place'],
-                                               description=dict['description'],user=response.user)
+                                               description=dict['description'],category=dict['category'],user=response.user)
                 db.save()
             elif dict['action'] == 'delete':
                 t = PointsInfo.objects.filter(coord1=dict['coord1'],coord2=dict['coord2'])
                 t.delete()
-                
+
 
     points = PointsInfo.objects.all()
     points_list = []
@@ -29,6 +29,7 @@ def main(response):
         points_dict['coord2'] = point.coord2
         points_dict['place'] = point.place
         points_dict['description'] = point.description
+        points_dict['category'] = point.category
         points_dict['user'] = point.user.username
         points_dict['date'] = datetime.strftime(point.date,"%d/%m//%Y")
         points_list.append(points_dict)
