@@ -11,9 +11,16 @@ def main(response):
     if response.is_ajax():
         if response.method == 'POST':
             dict = response.POST
-            db = PointsInfo.objects.create(coord1=dict['coord1'],coord2=dict['coord2'],place=dict['place'],
-                                           description=dict['description'],user=response.user)
-            db.save()
+            print(dict)
+            if dict['action'] == 'add':
+                db = PointsInfo.objects.create(coord1=dict['coord1'],coord2=dict['coord2'],place=dict['place'],
+                                               description=dict['description'],user=response.user)
+                db.save()
+            elif dict['action'] == 'delete':
+                t = PointsInfo.objects.filter(coord1=dict['coord1'],coord2=dict['coord2'])
+                t.delete()
+                
+
     points = PointsInfo.objects.all()
     points_list = []
     for point in points:
