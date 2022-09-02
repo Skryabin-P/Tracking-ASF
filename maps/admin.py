@@ -1,3 +1,4 @@
 from django.contrib import admin
-
-# Register your models here.
+from .models import EventsCategory,PointsInfo
+admin.site.register(EventsCategory)
+admin.site.register(PointsInfo)

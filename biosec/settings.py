@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'biosec',
     'maps',
     'crispy_forms',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
