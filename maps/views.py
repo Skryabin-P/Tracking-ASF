@@ -7,6 +7,7 @@ from django.views.generic import ListView
 from .forms import NewUserForm,TableContentFilter,SummaryTableFilter
 from .models import PointsInfo,EventsCategory
 from datetime import datetime
+from datetime import timedelta
 from django.core.paginator import Paginator
 from django.db.models import Count,F
 import json
@@ -25,8 +26,9 @@ def main(response):
                 t = PointsInfo.objects.filter(coord1=dict['coord1'],coord2=dict['coord2'])
                 t.delete()
 
-    # print(response.user.is_staff)
-    points = PointsInfo.objects.all()
+
+    one_year_delta = datetime.now() - timedelta(days=365)
+    points = PointsInfo.objects.filter(event_date__gte=one_year_delta)
     categories = EventsCategory.objects.all()
     category_list = []
     for category in categories:
@@ -57,7 +59,7 @@ def main(response):
 
 
 def maps_content_table(response):
-    filter = TableContentFilter(response.GET,queryset=PointsInfo.objects.all().order_by('-date'))
+    filter = TableContentFilter(response.GET,queryset=PointsInfo.objects.all().order_by('-date','-pk'))
     fields = ['Дата добавления','Дата происшествия','Место','Описание','Вид события','Кто поставил','Ссылка на источник']
     context = {}
     context['filter'] = filter
