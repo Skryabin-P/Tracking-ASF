@@ -63,7 +63,7 @@ def main(response):
 
 
 def maps_content_table(response):
-    filter = TableContentFilter(response.GET,queryset=PointsInfo.objects.all().order_by('-date','-pk'))
+    filter = TableContentFilter(response.GET,queryset=PointsInfo.objects.all().order_by('-event_date','-pk'))
     fields = ['Дата добавления','Дата происшествия','Место','Описание','Вид события','Кто поставил','Ссылка на источник']
     context = {}
     context['filter'] = filter
@@ -75,17 +75,17 @@ def maps_content_table(response):
 
     return render(response,'table.html',context)
 
-
+# summary for event categories
 def maps_stats(response):
-    filter = SummaryTableFilter(response.GET,queryset=PointsInfo.objects.all().order_by('-date'))
+    filter = SummaryTableFilter(response.GET,queryset=PointsInfo.objects.all().order_by())
     fields = ['Наименование','Колличество']
     context = {}
     context['filter'] = filter
     context['fields'] = fields
 
-    q = filter.qs.values("category__aliase").annotate(count = Count(F('category')))
+    q = filter.qs.values("category__aliase").annotate(count = Count(('category')))
     context['page_obj'] = q
-    print(q)
+
     return render(response,'table.html',context)
 
 
