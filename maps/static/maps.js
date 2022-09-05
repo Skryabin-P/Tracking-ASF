@@ -1,5 +1,6 @@
 ymaps.ready(init);
 var myMap;
+// if url doen't contain http:// or https then add https://
 function validateURL(link)
 {
     if (link.indexOf("http://") == 0 || link.indexOf("https://") == 0) {
@@ -9,20 +10,22 @@ function validateURL(link)
         return 'https://'+link
     }
 }
+
+// get color depends on circle category
 function get_color(category){
 
 switch(category){
     case "nature":
-    return ["#228B22","#006400"];
+    return ["#228B22","#006400"];  // green
     break;
     case "home":
-    return ["#FF0000","#B30000"];
+    return ["#FF0000","#B30000"]; //red
     break;
     case "markets":
-    return ["#6495ED","#00008B"]
+    return ["#6495ED","#00008B"] //blue
     break;
     default:
-    return ["#000000","#000000"]
+    return ["#000000","#000000"] //black
 }
 
 
@@ -44,11 +47,7 @@ function init () {
     var arrayLength = points.length;
     if (arrayLength > 0) {
 
-    var collection = new ymaps.GeoObjectCollection(null, {
-        // Запретим появление балуна.
-        hasBalloon: false,
-        iconColor: '#3b5998'
-    });
+    // add circles on map from DB
     for (var i = 0; i < arrayLength; i++) {
     point = points[i];
 
@@ -83,11 +82,11 @@ function init () {
 
 
     if(logged === "True"){
+        // if user have rights then allow him to add or delete circles
 
 
 
-
-// круг на пустое место
+// add circle on map
     myMap.events.add('click', function (e) {
          var coords = e.get('coords');
 
@@ -99,12 +98,13 @@ function init () {
     ], {
         //circle properties
     }, )
-// Добавление круга на карту, задание параметров
-    // Если меню метки уже отображено, то убираем его.
+// input parameters of the circle
+    // if menu already displayed then remove it
         if ($('#menu').css('display') == 'block') {
             $('#menu').remove();
 
        }
+       // if deletemenu already displayed then remove it
        else if ($('#deletemenu').css('display') == 'block' ) {
                 $('#deletemenu').remove();
         } else {
@@ -112,13 +112,13 @@ function init () {
             var dd = String(today.getDate()).padStart(2, '0');
             var mm = String(today.getMonth() + 1).padStart(2, '0');
             var yyyy = today.getFullYear();
-
+            // today date
             today =  dd + '/' + mm + '/' + yyyy;
-            // HTML-содержимое контекстного меню.
+
             var select_string = ''
 
             var arraylen = categories.length
-
+            // options for select tag
             for (var i = 0; i < arraylen; i++) {
                 category = categories[i];
 
@@ -126,7 +126,7 @@ function init () {
 
 
                 }
-
+            // html menu content
             var menuContent =
             '<div class=rightside>'+
                 '<div id="menu">' +
@@ -142,27 +142,10 @@ function init () {
 
                 '</div></div>' ;
 
-            // Размещаем контекстное меню на странице
+            // add menu to body of html
             $('body').append(menuContent);
 
-            // Задаем позицию меню.
-            console.log(e.get('pagePixels'));
-
-//            $('#menu div[id="menu"]').css({
-//            position:"absolute",
-//            top: "e.get('pagePixels')[0]" + "px",
-//            left: "e.get('pagePixels')[1]" + "px",
-//            })
-
-
-
-            // Заполняем поля контекстного меню текущими значениями свойств метки.
-            $('#menu input[name="place_text"]').val(myCircle.properties.get('balloonContentHeader'));
-            $('#menu input[name="describe_text"]').val(myCircle.properties.get('balloonContentBody'));
-//            $('#menu input[name="balloon_text"]').val(myCircle.properties.get('balloonContent'));
-
-            // При нажатии на кнопку "Сохранить" изменяем свойства метки
-            // значениями, введенными в форме контекстного меню.
+            // click on Add button
             $('#menu input[id="add"]').click(function () {
 
                 var place = $('input[name="place_text"]').val()
@@ -176,12 +159,8 @@ function init () {
                 console.log(color)
                 console.log(myCircle)
                 var description = $('input[name=describe_text]').val()
+                // set baloon properties
                 myCircle.properties.set({
-
-
-
-//                    iconContent: $('input[name="icon_text"]').val(),
-//                    hintContent: $('input[name="hint_text"]').val(),
                     balloonContentHeader: '<strong>Место</strong> ' + place,
                     balloonContentBody:  '<strong>Описание</strong> '+ description + '<br> <strong>Дата происшествия</strong>: '+ event_date+
                     "<br><a target='_blank' class='btn btn-primary btn-sm' href=" + url + ">Ссылка на источник</a>" ,
@@ -201,12 +180,12 @@ function init () {
 
             strokeWidth: 5
             })
-                // Удаляем контекстное меню.
+                // delete menu
                 $('#menu').remove();
 
-                // Добавляем круг на карту.
+                // add circle on map
     myMap.geoObjects.add(myCircle);
-
+    // send ajax to django
     $.ajax({
                 url: '',
                 type: 'POST',
@@ -238,7 +217,7 @@ function init () {
 
 
 })
-
+// similarly as previous, but it add circle in the area of another circle
 myMap.geoObjects.events.add('click',function(e){
 
 var coords = e.get('coords');
@@ -251,8 +230,7 @@ var coords = e.get('coords');
     ], {
         //circle properties
     }, )
-// Добавление круга на карту, задание параметров
-    // Если меню метки уже отображено, то убираем его.
+
         if ($('#menu').css('display') == 'block') {
             $('#menu').remove();
 
@@ -266,7 +244,7 @@ var coords = e.get('coords');
             var yyyy = today.getFullYear();
 
             today =  dd + '/' + mm + '/' + yyyy;
-            // HTML-содержимое контекстного меню.
+
             var select_string = ''
 
             var arraylen = categories.length
@@ -294,27 +272,16 @@ var coords = e.get('coords');
 
                 '</div></div>' ;
 
-            // Размещаем контекстное меню на странице
+
             $('body').append(menuContent);
 
-            // Задаем позицию меню.
+
             console.log(e.get('pagePixels'));
 
-//            $('#menu div[id="menu"]').css({
-//            position:"absolute",
-//            top: "e.get('pagePixels')[0]" + "px",
-//            left: "e.get('pagePixels')[1]" + "px",
-//            })
 
 
 
-            // Заполняем поля контекстного меню текущими значениями свойств метки.
-            $('#menu input[name="place_text"]').val(myCircle.properties.get('balloonContentHeader'));
-            $('#menu input[name="describe_text"]').val(myCircle.properties.get('balloonContentBody'));
-//            $('#menu input[name="balloon_text"]').val(myCircle.properties.get('balloonContent'));
 
-            // При нажатии на кнопку "Сохранить" изменяем свойства метки
-            // значениями, введенными в форме контекстного меню.
             $('#menu input[id="add"]').click(function () {
 
                 var place = $('input[name="place_text"]').val()
@@ -331,9 +298,6 @@ var coords = e.get('coords');
                 myCircle.properties.set({
 
 
-
-//                    iconContent: $('input[name="icon_text"]').val(),
-//                    hintContent: $('input[name="hint_text"]').val(),
                     balloonContentHeader: '<strong>Место</strong> ' + place,
                     balloonContentBody:  '<strong>Описание</strong> '+ description + '<br> <strong>Дата происшествия</strong>: '+ event_date+
                     "<br><a target='_blank' class='btn btn-primary btn-sm' href=" + url + ">Ссылка на источник</a>" ,
@@ -353,10 +317,10 @@ var coords = e.get('coords');
 
             strokeWidth: 5
             })
-                // Удаляем контекстное меню.
+
                 $('#menu').remove();
 
-                // Добавляем круг на карту.
+
     myMap.geoObjects.add(myCircle);
 
     $.ajax({
@@ -390,7 +354,7 @@ var coords = e.get('coords');
 
 )
 
-
+// delete circle by clicking right mouse button
 myMap.geoObjects.events.add('contextmenu',function(e){
 
 var object = e.get('target');
@@ -399,25 +363,28 @@ var coords = object.geometry._coordinates
 var place = object.properties._data.balloonContentHeader;
 
 
-
+// if deletemenu already showed then delete it
 if ($('#deletemenu').css('display') == 'block' ) {
             $('#deletemenu').remove();
         }
+        // if menu already showed then delete it
          else if ($('#menu').css('display') == 'block' ) {
                 $('#menu').remove();
 
          }
 
          else {
+         // delete menu html content
         var menuContent =
                 '<div class=rightside>'+
                 '<div id="deletemenu">'+'<p>Вы уверены что хотите удалить ' + place + '? </p>'+
                 '<div align="center"><input class="btn btn-danger" id="delete" value="удалить" /></div>'+
                 '</div></div>';
-
+        // add deletemenu in the html body
          $('body').append(menuContent);
          $('#deletemenu input[id="delete"]').click(function () {
          $('#deletemenu').remove();
+         //send ajax to django
          $.ajax({
                 url: '',
                 type: 'POST',
@@ -430,6 +397,7 @@ if ($('#deletemenu').css('display') == 'block' ) {
                 success: alert('Точка удалена')
 
             })
+        // remove circle
         myMap.geoObjects.remove(object)
 
         })

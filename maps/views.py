@@ -12,8 +12,10 @@ from django.core.paginator import Paginator
 from django.db.models import Count,F
 import json
 def main(response):
+    # if javascript send ajax request
     if response.is_ajax():
         if response.method == 'POST':
+            # dictionary from js map
             dict = response.POST
             print(dict)
             if dict['action'] == 'add':
@@ -26,11 +28,12 @@ def main(response):
                 t = PointsInfo.objects.filter(coord1=dict['coord1'],coord2=dict['coord2'])
                 t.delete()
 
-
+    # if event date is older than 1 year then we don't these points
     one_year_delta = datetime.now() - timedelta(days=365)
     points = PointsInfo.objects.filter(event_date__gte=one_year_delta)
     categories = EventsCategory.objects.all()
     category_list = []
+    # create category list to send in JS for choosing circle's color
     for category in categories:
         temp = {}
         temp['name'] = category.name
@@ -38,6 +41,7 @@ def main(response):
         category_list.append(temp)
 
     points_list = []
+    # create points list which circles we show
     for point in points:
         points_dict = {}
         points_dict['coord1'] = point.coord1
