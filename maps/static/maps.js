@@ -145,7 +145,7 @@ function init () {
 
             // add menu to body of html
             $('body').append(menuContent);
-            document.getElementById('rmenu').style = 'top:' + height * 0.15 + 'px' +';' + 'left:' + width * 1.17 + 'px';
+            document.getElementById('rmenu').style = 'top:' + height * 0.4 + 'px' +';' + 'left:' + width * 1.17 + 'px';
             // click on Add button
             $('#menu input[id="add"]').click(function () {
 
@@ -272,7 +272,7 @@ var coords = e.get('coords');
 
 
             $('body').append(menuContent);
-            document.getElementById('rmenu').style = 'top:' + height * 0.15 + 'px' +';' + 'left:' + width * 1.17 + 'px';
+            document.getElementById('rmenu').style = 'top:' + height * 0.4 + 'px' +';' + 'left:' + width * 1.17 + 'px';
 
             console.log(e.get('pagePixels'));
 
@@ -376,7 +376,7 @@ if ($('#rmenu').css('display') == 'block') {
                 '</div></div>';
         // add deletemenu in the html body
          $('body').append(menuContent);
-         document.getElementById('rmenu').style = 'top:' + height * 0.15 + 'px' +';' + 'left:' + width * 1.17 + 'px';
+         document.getElementById('rmenu').style = 'top:' + height * 0.4 + 'px' +';' + 'left:' + width * 1.17 + 'px';
          $('#deletemenu input[id="delete"]').click(function () {
          $('#deletemenu').remove();
          $('#rmenu').remove();
