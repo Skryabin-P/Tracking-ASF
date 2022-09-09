@@ -1,5 +1,8 @@
 ymaps.ready(init);
 var myMap;
+
+
+
 // if url doen't contain http:// or https then add https://
 function validateURL(link)
 {
@@ -100,14 +103,12 @@ function init () {
     }, )
 // input parameters of the circle
     // if menu already displayed then remove it
-        if ($('#menu').css('display') == 'block') {
-            $('#menu').remove();
+        if ($('#rmenu').css('display') == 'block') {
+            $('#rmenu').remove();
 
        }
-       // if deletemenu already displayed then remove it
-       else if ($('#deletemenu').css('display') == 'block' ) {
-                $('#deletemenu').remove();
-        } else {
+
+         else {
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
             var mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -128,7 +129,7 @@ function init () {
                 }
             // html menu content
             var menuContent =
-            '<div class=rightside>'+
+            '<div class=rightside id=rmenu>'+
                 '<div id="menu">' +
                     '<ul id="menu_list">'+
                         '<li>Место: <br /> <input type="text" name="place_text" /></li>'+
@@ -144,7 +145,7 @@ function init () {
 
             // add menu to body of html
             $('body').append(menuContent);
-
+            document.getElementById('rmenu').style = 'top:' + height * 0.15 + 'px' +';' + 'left:' + width * 1.17 + 'px';
             // click on Add button
             $('#menu input[id="add"]').click(function () {
 
@@ -182,7 +183,7 @@ function init () {
             })
                 // delete menu
                 $('#menu').remove();
-
+                $('#rmenu').remove();
                 // add circle on map
     myMap.geoObjects.add(myCircle);
     // send ajax to django
@@ -231,13 +232,10 @@ var coords = e.get('coords');
         //circle properties
     }, )
 
-        if ($('#menu').css('display') == 'block') {
-            $('#menu').remove();
+        if ($('#rmenu').css('display') == 'block') {
+            $('#rmenu').remove();
 
-       }
-       else if ($('#deletemenu').css('display') == 'block' ) {
-                $('#deletemenu').remove();
-        } else {
+       } else {
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
             var mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -258,7 +256,7 @@ var coords = e.get('coords');
                 }
 
             var menuContent =
-            '<div class=rightside>'+
+            '<div class=rightside id=rmenu >'+
                 '<div id="menu">' +
                     '<ul id="menu_list">'+
                         '<li>Место: <br /> <input type="text" name="place_text" /></li>'+
@@ -274,7 +272,7 @@ var coords = e.get('coords');
 
 
             $('body').append(menuContent);
-
+            document.getElementById('rmenu').style = 'top:' + height * 0.15 + 'px' +';' + 'left:' + width * 1.17 + 'px';
 
             console.log(e.get('pagePixels'));
 
@@ -319,7 +317,7 @@ var coords = e.get('coords');
             })
 
                 $('#menu').remove();
-
+                $('#rmenu').remove();
 
     myMap.geoObjects.add(myCircle);
 
@@ -364,26 +362,24 @@ var place = object.properties._data.balloonContentHeader;
 
 
 // if deletemenu already showed then delete it
-if ($('#deletemenu').css('display') == 'block' ) {
-            $('#deletemenu').remove();
-        }
-        // if menu already showed then delete it
-         else if ($('#menu').css('display') == 'block' ) {
-                $('#menu').remove();
+if ($('#rmenu').css('display') == 'block') {
+            $('#rmenu').remove();
 
-         }
+       }
 
          else {
          // delete menu html content
         var menuContent =
-                '<div class=rightside>'+
+                '<div class=rightside id=rmenu>'+
                 '<div id="deletemenu">'+'<p>Вы уверены что хотите удалить ' + place + '? </p>'+
                 '<div align="center"><input class="btn btn-danger" id="delete" value="удалить" /></div>'+
                 '</div></div>';
         // add deletemenu in the html body
          $('body').append(menuContent);
+         document.getElementById('rmenu').style = 'top:' + height * 0.15 + 'px' +';' + 'left:' + width * 1.17 + 'px';
          $('#deletemenu input[id="delete"]').click(function () {
          $('#deletemenu').remove();
+         $('#rmenu').remove();
          //send ajax to django
          $.ajax({
                 url: '',

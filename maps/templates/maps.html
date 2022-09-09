@@ -21,11 +21,31 @@
     var token = "{{csrf_token}}"
     var points = {{ points|safe }};
     var categories = {{categories | safe}}
+</script> <div class=legend id=legend><h5 class="text-warning bg-dark">Легенда карты</h5> <ul id="menu_list">
+    <li><div id="rectangle" style="width:20 px; height:20 px; background-color:#228B22">Очаги в дикой природе</div></li><br>
+    <li><div id="rectangle" style="width:20 px; height:20 px; background-color:#FF0000">Очаги домашней свиньи</div></li><br>
+    <li><div id="rectangle" style="width:20 px; height:20 px; background-color:#6495ED">Инфицированное мясо</div></li></ul> </div> <div id="map" style="width: 500px; height: 500px">
+
+    <script type="text/javascript">
+    var height = window.screen.height * 0.75
+    var width = window.screen.width * 0.7
+    var legend = ''
+    console.log(height)
+    document.getElementById('legend').style = 'top:' + height * 0.6 + 'px' +';' + 'left:' + width * 1.17 + 'px';
+    document.getElementById('map').setAttribute( 'style' , 'width:'+ width + 'px' + ';' + 'height:' +  height + 'px');
+<!--    document.getElementById('rmenu').style = 'top:' + height * 0.1 + 'px' +';' + 'left:' + width * 0.7 + 'px';-->
+
+
 </script>
 <script type="text/javascript" src="{% static '/maps.js' %}">
     </script>
-    <div id="map" style="width: 1200px; height: 800px"></div>
+
+
+
+    </div>
 {% endblock %}
+
+
 </body>
 
 </html>
