@@ -4,7 +4,7 @@
 
 This website was produced for tracking  and adding points of african swine fever outbreaks
 #### It works on Django and Yandex Map API Javascript
- I know JS as good as almost nothing so don't judge me :D
+ I know JS as good as almost nothing so don't judge me for some shit codding in JS part:D
 
 ### There's few main parts :
 1. Main page which contains Yandex Map. if user has access he can add
